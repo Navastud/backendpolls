@@ -28,9 +28,11 @@ spring:
     time-zone: UTC
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
-      
-
-
+## App Properties
+app:
+  jwtSecret: JWTSuperSecretKey
+  jwtExpirationInMs: 604800000
+  
 
 
 
