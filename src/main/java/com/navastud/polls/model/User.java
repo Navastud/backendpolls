@@ -29,6 +29,10 @@ public class User extends DateAudit {
 	private Long id;
 
 	@NotBlank
+	@Size(max = 100)
+	private String name;
+
+	@NotBlank
 	@Size(max = 40)
 	private String username;
 
@@ -42,10 +46,6 @@ public class User extends DateAudit {
 	@Size(max = 100)
 	private String password;
 
-	@NotBlank
-	@Size(max = 100)
-	private String name;
-
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<Role>();
@@ -54,14 +54,12 @@ public class User extends DateAudit {
 		super();
 	}
 
-	public User(Long id, @NotBlank @Size(max = 40) String username, @NotBlank @Size(max = 40) @Email String email,
-			@NotBlank @Size(max = 100) String password, @NotBlank @Size(max = 100) String name) {
+	public User(String name, String username, String email, String password) {
 		super();
-		this.id = id;
+		this.name = name;
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.name = name;
 	}
 
 	public Long getId() {
