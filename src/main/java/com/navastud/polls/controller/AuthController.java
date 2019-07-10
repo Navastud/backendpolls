@@ -79,6 +79,8 @@ public class AuthController {
 		User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
 				signUpRequest.getPassword());
 
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+
 		Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
 				.orElseThrow(() -> new AppException("User Role not set"));
 

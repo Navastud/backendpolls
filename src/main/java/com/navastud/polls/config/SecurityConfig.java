@@ -24,8 +24,9 @@ import com.navastud.polls.security.JwtAuthenticationFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
 	@Autowired
-	CustomUserDetailsService customUserDetailsService;
+	private CustomUserDetailsService customUserDetailsService;
 
 	@Autowired
 	private JwtAuthenticationEntryPoint unauthorizedHandler;

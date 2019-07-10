@@ -19,6 +19,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
 
+import com.navastud.polls.model.audit.DateAudit;
+
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
 		@UniqueConstraint(columnNames = { "email" }) })
