@@ -1,4 +1,4 @@
-package com.navastud.polls.model;
+package com.navastud.polls.model.audit;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,11 +17,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class DateAudit implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6902012339386366483L;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
@@ -55,10 +50,6 @@ public class DateAudit implements Serializable {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 }
