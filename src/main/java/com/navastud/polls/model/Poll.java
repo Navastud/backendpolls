@@ -20,9 +20,11 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.navastud.polls.model.audit.UserDateAudit;
+
 @Entity
 @Table(name = "polls")
-public class Poll {
+public class Poll extends UserDateAudit {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
