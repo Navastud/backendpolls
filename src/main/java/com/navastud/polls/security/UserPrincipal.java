@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.navastud.polls.model.User;
 
 public class UserPrincipal implements UserDetails {
+
 	private Long id;
 
 	private String name;
