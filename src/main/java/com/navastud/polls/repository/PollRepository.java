@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.navastud.polls.model.Poll;
 
-@Repository
+@Repository("pollRepository")
 public interface PollRepository extends JpaRepository<Poll, Serializable> {
 
 	Optional<Poll> findById(Long pollId);

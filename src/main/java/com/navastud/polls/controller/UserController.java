@@ -23,6 +23,7 @@ import com.navastud.polls.repository.UserRepository;
 import com.navastud.polls.repository.VoteRepository;
 import com.navastud.polls.security.CurrentUser;
 import com.navastud.polls.security.UserPrincipal;
+import com.navastud.polls.service.PollService;
 import com.navastud.polls.util.AppConstants;
 
 @RestController
@@ -42,7 +43,7 @@ public class UserController {
 	private VoteRepository voteRepository;
 
 	@Autowired
-	@Qualifier("pollService")
+	@Qualifier("pollServiceImpl")
 	private PollService pollService;
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);

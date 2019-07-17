@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.navastud.polls.model.ChoiceVoteCount;
 import com.navastud.polls.model.Vote;
 
-@Repository
+@Repository("voteRepository")
 public interface VoteRepository extends JpaRepository<Vote, Serializable> {
 
 	@Query("SELECT NEW com.navastud.polls.model.ChoiceVoteCount(v.choice.id, count(v.id)) FROM Vote v WHERE v.poll.id in :pollIds GROUP BY v.choice.id")
@@ -32,5 +32,5 @@ public interface VoteRepository extends JpaRepository<Vote, Serializable> {
 	long countByUserId(@Param("userId") Long userId);
 
 	@Query("SELECT v.poll.id FROM Vote v WHERE v.user.id = :userId")
-	Page<Long> findVotePollIdsByUserId(@Param("userId") Long userId, Pageable pegeable);
+	Page<Long> findVotedPollIdsByUserId(@Param("userId") Long userId, Pageable pegeable);
 }
