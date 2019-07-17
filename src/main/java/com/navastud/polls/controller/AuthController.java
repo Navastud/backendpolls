@@ -6,6 +6,7 @@ import java.util.Collections;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,16 +40,18 @@ public class AuthController {
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
+	@Qualifier("userRepository")
 	private UserRepository userRepository;
 
 	@Autowired
+	@Qualifier("roleRepository")
 	private RoleRepository roleRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	JwtTokenProvider tokenProvider;
+	private JwtTokenProvider tokenProvider;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
