@@ -3,6 +3,7 @@ package com.navastud.polls.security;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,10 +12,11 @@ import org.springframework.stereotype.Service;
 import com.navastud.polls.model.User;
 import com.navastud.polls.repository.UserRepository;
 
-@Service
+@Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
+	@Qualifier("userRepository")
 	private UserRepository userRepository;
 
 	@Override
@@ -25,6 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 				() -> new UsernameNotFoundException("User not found with username or email : " + usernameOrEmail));
 
 		return UserPrincipal.create(user);
+
 	}
 
 	// This method is used by JWTAuthenticationFilter

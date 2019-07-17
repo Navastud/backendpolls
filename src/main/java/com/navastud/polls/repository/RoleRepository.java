@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.navastud.polls.constant.RoleName;
 import com.navastud.polls.model.Role;
 
-@Repository
+@Repository("roleRepository")
 public interface RoleRepository extends JpaRepository<Role, Serializable> {
 
 	Optional<Role> findByName(RoleName roleName);
