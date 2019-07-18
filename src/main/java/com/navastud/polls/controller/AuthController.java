@@ -1,9 +1,6 @@
 package com.navastud.polls.controller;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -21,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.navastud.polls.constant.RoleName;
-import com.navastud.polls.exception.AppException;
-import com.navastud.polls.model.Role;
 import com.navastud.polls.model.User;
 import com.navastud.polls.payload.ApiResponse;
 import com.navastud.polls.payload.JwtAuthenticationResponse;
@@ -69,11 +63,13 @@ public class AuthController {
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 
 		if (userService.existsByUsername(signUpRequest.getUsername())) {
-			return new ResponseEntity(new ApiResponse(false, "Username is already taken!"), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Username is already taken!"),
+					HttpStatus.BAD_REQUEST);
 		}
 
 		if (userService.existsByEmail(signUpRequest.getEmail())) {
-			return new ResponseEntity(new ApiResponse(false, "Email address already in use!"), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Email address already in use!"),
+					HttpStatus.BAD_REQUEST);
 		}
 
 		User result = userService.createUser(signUpRequest);

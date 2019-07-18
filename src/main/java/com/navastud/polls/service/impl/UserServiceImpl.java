@@ -2,12 +2,8 @@ package com.navastud.polls.service.impl;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +12,6 @@ import com.navastud.polls.exception.ResourceNotFoundException;
 import com.navastud.polls.model.User;
 import com.navastud.polls.payload.SignUpRequest;
 import com.navastud.polls.repository.UserRepository;
-import com.navastud.polls.security.UserPrincipal;
 import com.navastud.polls.service.UserService;
 
 @Service("userServiceImpl")

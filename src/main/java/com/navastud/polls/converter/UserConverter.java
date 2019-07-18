@@ -1,15 +1,14 @@
 package com.navastud.polls.converter;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.navastud.polls.constant.RoleName;
 import com.navastud.polls.exception.AppException;
-import com.navastud.polls.model.Role;
 import com.navastud.polls.model.User;
 import com.navastud.polls.payload.SignUpRequest;
 import com.navastud.polls.service.RoleService;
@@ -31,11 +30,8 @@ public class UserConverter {
 		user.setUsername(signUpRequest.getUsername());
 		user.setEmail(signUpRequest.getEmail());
 		user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-
-		Set<Role> roles = signUpRequest.getRoles().stream().map(role -> roleService.findByName(role.getName())
-				.orElseThrow(() -> new AppException("User Role not set 2"))).collect(Collectors.toSet());
-
-		user.setRoles(roles);
+		user.setRoles(Collections.singleton(
+				roleService.findByName(RoleName.ROLE_USER).orElseThrow(() -> new AppException("User Role not set 2"))));
 
 		return user;
 	}

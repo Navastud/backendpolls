@@ -18,6 +18,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public class DateAudit implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3116577820955851088L;
+
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;

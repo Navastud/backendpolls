@@ -26,6 +26,11 @@ import com.navastud.polls.model.audit.DateAudit;
 		@UniqueConstraint(columnNames = { "email" }) })
 public class User extends DateAudit {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 338307675615807909L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

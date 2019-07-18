@@ -29,7 +29,6 @@ import com.navastud.polls.security.CurrentUser;
 import com.navastud.polls.security.UserPrincipal;
 import com.navastud.polls.service.PollService;
 import com.navastud.polls.service.UserService;
-import com.navastud.polls.service.VoteService;
 import com.navastud.polls.util.AppConstants;
 
 @RestController

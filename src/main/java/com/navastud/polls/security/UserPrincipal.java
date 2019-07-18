@@ -14,6 +14,11 @@ import com.navastud.polls.model.User;
 
 public class UserPrincipal implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1043663128067466006L;
+
 	private Long id;
 
 	private String name;

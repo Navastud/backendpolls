@@ -1,7 +1,6 @@
 package com.navastud.polls.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.navastud.polls.model.User;
 import com.navastud.polls.payload.SignUpRequest;

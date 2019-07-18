@@ -26,6 +26,11 @@ import com.navastud.polls.model.audit.UserDateAudit;
 @Table(name = "polls")
 public class Poll extends UserDateAudit {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

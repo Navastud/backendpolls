@@ -16,6 +16,11 @@ import com.navastud.polls.model.audit.DateAudit;
 @Table(name = "votes", uniqueConstraints = { @UniqueConstraint(columnNames = { "poll_id", "user_id" }) })
 public class Vote extends DateAudit {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2152554288212685154L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
