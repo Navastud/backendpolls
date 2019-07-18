@@ -25,12 +25,11 @@ import com.navastud.polls.payload.PagedResponse;
 import com.navastud.polls.payload.PollRequest;
 import com.navastud.polls.payload.PollResponse;
 import com.navastud.polls.payload.VoteRequest;
-import com.navastud.polls.repository.PollRepository;
-import com.navastud.polls.repository.UserRepository;
-import com.navastud.polls.repository.VoteRepository;
 import com.navastud.polls.security.CurrentUser;
 import com.navastud.polls.security.UserPrincipal;
 import com.navastud.polls.service.PollService;
+import com.navastud.polls.service.UserService;
+import com.navastud.polls.service.VoteService;
 import com.navastud.polls.util.AppConstants;
 
 @RestController
@@ -38,16 +37,8 @@ import com.navastud.polls.util.AppConstants;
 public class PollController {
 
 	@Autowired
-	@Qualifier("pollRepository")
-	private PollRepository pollRepository;
-
-	@Autowired
-	@Qualifier("voteRepository")
-	private VoteRepository voteRepository;
-
-	@Autowired
-	@Qualifier("userRepository")
-	private UserRepository userRepository;
+	@Qualifier("userServiceImpl")
+	private UserService userService;
 
 	@Autowired
 	@Qualifier("pollServiceImpl")
@@ -63,7 +54,7 @@ public class PollController {
 	};
 
 	@PostMapping
-	@PreAuthorize("hasRole('ROLE')")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> createPoll(@Valid @RequestBody PollRequest pollRequest) {
 
 		Poll poll = pollService.createPoll(pollRequest);
@@ -74,7 +65,7 @@ public class PollController {
 	}
 
 	@PostMapping("/{pollId}/votes")
-	@PreAuthorize("hasRole('ROLE')")
+	@PreAuthorize("hasRole('USER')")
 	public PollResponse castVote(@CurrentUser UserPrincipal currentUser, @PathVariable Long pollId,
 			@Valid @RequestBody VoteRequest voteRequest) {
 

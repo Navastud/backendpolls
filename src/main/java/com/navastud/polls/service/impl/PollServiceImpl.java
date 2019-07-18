@@ -30,10 +30,10 @@ import com.navastud.polls.payload.PollRequest;
 import com.navastud.polls.payload.PollResponse;
 import com.navastud.polls.payload.VoteRequest;
 import com.navastud.polls.repository.PollRepository;
-import com.navastud.polls.repository.UserRepository;
-import com.navastud.polls.repository.VoteRepository;
 import com.navastud.polls.security.UserPrincipal;
 import com.navastud.polls.service.PollService;
+import com.navastud.polls.service.UserService;
+import com.navastud.polls.service.VoteService;
 import com.navastud.polls.util.AppConstants;
 import com.navastud.polls.util.ModelMapper;
 
@@ -45,12 +45,12 @@ public class PollServiceImpl implements PollService {
 	private PollRepository pollRepository;
 
 	@Autowired
-	@Qualifier("voteRepository")
-	private VoteRepository voteRepository;
+	@Qualifier("voteServiceImpl")
+	private VoteService voteService;
 
 	@Autowired
-	@Qualifier("userRepository")
-	private UserRepository userRepository;
+	@Qualifier("userServiceImpl")
+	private UserService userService;
 
 	private static final Logger logger = LoggerFactory.getLogger(PollServiceImpl.class);
 
@@ -90,8 +90,7 @@ public class PollServiceImpl implements PollService {
 
 		validatePageNumberAndSize(page, size);
 
-		User user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+		User user = userService.findByUsername(username);
 
 		// Retrieve all polls created by the given username
 		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
@@ -122,12 +121,11 @@ public class PollServiceImpl implements PollService {
 
 		validatePageNumberAndSize(page, size);
 
-		User user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+		User user = userService.findByUsername(username);
 
 		// Retrieve all pollIds in which the given username has voted
 		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-		Page<Long> userVotedPollIds = voteRepository.findVotedPollIdsByUserId(user.getId(), pageable);
+		Page<Long> userVotedPollIds = voteService.findVotedPollIdsByUserId(user.getId(), pageable);
 
 		if (userVotedPollIds.getNumberOfElements() == 0) {
 			return new PagedResponse<>(Collections.emptyList(), userVotedPollIds.getNumber(),
@@ -182,19 +180,18 @@ public class PollServiceImpl implements PollService {
 				.orElseThrow(() -> new ResourceNotFoundException("Poll", "id", pollId));
 
 		// Retrieve Vote Counts of every choice belonging to the current poll
-		List<ChoiceVoteCount> votes = voteRepository.countByPollIdGroupByChoiceId(pollId);
+		List<ChoiceVoteCount> votes = voteService.countByPollIdGroupByChoiceId(pollId);
 
 		Map<Long, Long> choiceVotesMap = votes.stream()
 				.collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
 
 		// Retrieve poll creator details
-		User creator = userRepository.findById(poll.getCreatedBy())
-				.orElseThrow(() -> new ResourceNotFoundException("User", "id", poll.getCreatedBy()));
+		User creator = userService.findById(poll.getCreatedBy());
 
 		// Retrieve vote done by logged in user
 		Vote userVote = null;
 		if (currentUser != null) {
-			userVote = voteRepository.findByUserIdAndPollId(currentUser.getId(), pollId);
+			userVote = voteService.findByUserIdAndPollId(currentUser.getId(), pollId);
 		}
 
 		return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap, creator,
@@ -210,7 +207,7 @@ public class PollServiceImpl implements PollService {
 			throw new BadRequestException("Sorry! This Poll has already expired");
 		}
 
-		User user = userRepository.getOne(currentUser.getId());
+		User user = userService.getOne(currentUser.getId());
 
 		Choice selectedChoice = poll.getChoices().stream()
 				.filter(choice -> choice.getId().equals(voteRequest.getChoiceId())).findFirst()
@@ -222,7 +219,7 @@ public class PollServiceImpl implements PollService {
 		vote.setChoice(selectedChoice);
 
 		try {
-			vote = voteRepository.save(vote);
+			vote = voteService.createVote(vote);
 		} catch (DataIntegrityViolationException ex) {
 			logger.info("User {} has already voted in Poll {}", currentUser.getId(), pollId);
 			throw new BadRequestException("Sorry! You have already cast your vote in this poll");
@@ -231,14 +228,13 @@ public class PollServiceImpl implements PollService {
 		// -- Vote Saved, Return the updated Poll Response now --
 
 		// Retrieve Vote Counts of every choice belonging to the current poll
-		List<ChoiceVoteCount> votes = voteRepository.countByPollIdGroupByChoiceId(pollId);
+		List<ChoiceVoteCount> votes = voteService.countByPollIdGroupByChoiceId(pollId);
 
 		Map<Long, Long> choiceVotesMap = votes.stream()
 				.collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
 
 		// Retrieve poll creator details
-		User creator = userRepository.findById(poll.getCreatedBy())
-				.orElseThrow(() -> new ResourceNotFoundException("User", "id", poll.getCreatedBy()));
+		User creator = userService.findById(poll.getCreatedBy());
 
 		return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap, creator, vote.getChoice().getId());
 
@@ -258,7 +254,7 @@ public class PollServiceImpl implements PollService {
 	@Override
 	public Map<Long, Long> getChoiceVoteCountMap(List<Long> pollIds) {
 		// Retrieve Vote Counts of every Choice belonging to the given pollIds
-		List<ChoiceVoteCount> votes = voteRepository.countByPollIdInGroupByChoiceId(pollIds);
+		List<ChoiceVoteCount> votes = voteService.countByPollIdInGroupByChoiceId(pollIds);
 
 		Map<Long, Long> choiceVotesMap = votes.stream()
 				.collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
@@ -272,7 +268,7 @@ public class PollServiceImpl implements PollService {
 		// Retrieve Votes done by the logged in user to the given pollIds
 		Map<Long, Long> pollUserVoteMap = null;
 		if (currentUser != null) {
-			List<Vote> userVotes = voteRepository.findByUserIdAndPollIdIn(currentUser.getId(), pollIds);
+			List<Vote> userVotes = voteService.findByUserIdAndPollIdIn(currentUser.getId(), pollIds);
 
 			pollUserVoteMap = userVotes.stream()
 					.collect(Collectors.toMap(vote -> vote.getPoll().getId(), vote -> vote.getChoice().getId()));
@@ -286,9 +282,14 @@ public class PollServiceImpl implements PollService {
 		// Get Poll Creator details of the given list of polls
 		List<Long> creatorIds = polls.stream().map(Poll::getCreatedBy).distinct().collect(Collectors.toList());
 
-		List<User> creators = userRepository.findByIdIn(creatorIds);
+		List<User> creators = userService.findByIdIn(creatorIds);
 		Map<Long, User> creatorMap = creators.stream().collect(Collectors.toMap(User::getId, Function.identity()));
 
 		return creatorMap;
+	}
+
+	@Override
+	public long countByCreatedBy(Long id) {
+		return pollRepository.countByCreatedBy(id);
 	}
 }

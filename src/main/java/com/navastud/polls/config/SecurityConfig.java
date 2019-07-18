@@ -17,9 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.navastud.polls.security.CustomUserDetailsService;
 import com.navastud.polls.security.JwtAuthenticationEntryPoint;
 import com.navastud.polls.security.JwtAuthenticationFilter;
+import com.navastud.polls.security.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -27,8 +27,8 @@ import com.navastud.polls.security.JwtAuthenticationFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	@Qualifier("customUserDetailsService")
-	private CustomUserDetailsService customUserDetailsService;
+	@Qualifier("userDetailsServiceImpl")
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Autowired
 	private JwtAuthenticationEntryPoint unauthorizedHandler;
@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+		authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
 	}
 
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)

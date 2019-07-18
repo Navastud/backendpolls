@@ -9,33 +9,26 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.navastud.polls.model.User;
-import com.navastud.polls.repository.UserRepository;
+import com.navastud.polls.service.UserService;
 
-@Service("customUserDetailsService")
-public class CustomUserDetailsService implements UserDetailsService {
+@Service("userDetailsServiceImpl")
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	@Qualifier("userRepository")
-	private UserRepository userRepository;
+	@Qualifier("userServiceImpl")
+	private UserService userService;
 
+	// Let people login with either username or email
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-		// Let people login with either username or email
-		User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(
-				() -> new UsernameNotFoundException("User not found with username or email : " + usernameOrEmail));
-
-		return UserPrincipal.create(user);
+		return UserPrincipal.create(userService.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail));
 
 	}
 
 	// This method is used by JWTAuthenticationFilter
 	@Transactional
 	public UserDetails loadUserById(Long id) {
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found with id : " + id));
-
-		return UserPrincipal.create(user);
+		return UserPrincipal.create(userService.findById(id));
 	}
 }

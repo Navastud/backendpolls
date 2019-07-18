@@ -33,4 +33,6 @@ public interface PollService {
 
 	Map<Long, User> getPollCreatorMap(List<Poll> polls);
 
+	long countByCreatedBy(Long id);
+
 }

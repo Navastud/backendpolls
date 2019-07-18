@@ -32,5 +32,5 @@ public interface VoteRepository extends JpaRepository<Vote, Serializable> {
 	long countByUserId(@Param("userId") Long userId);
 
 	@Query("SELECT v.poll.id FROM Vote v WHERE v.user.id = :userId")
-	Page<Long> findVotedPollIdsByUserId(@Param("userId") Long userId, Pageable pegeable);
+	Page<Long> findVotedPollIdsByUserId(@Param("userId") Long userId, Pageable pageable);
 }
