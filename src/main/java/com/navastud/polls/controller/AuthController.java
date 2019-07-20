@@ -1,35 +1,31 @@
 package com.navastud.polls.controller;
 
 import java.net.URI;
-import java.util.Collections;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.navastud.polls.constant.RoleName;
-import com.navastud.polls.exception.AppException;
-import com.navastud.polls.model.Role;
-import com.navastud.polls.model.User;
+import com.navastud.polls.entity.User;
 import com.navastud.polls.payload.ApiResponse;
 import com.navastud.polls.payload.JwtAuthenticationResponse;
 import com.navastud.polls.payload.LoginRequest;
 import com.navastud.polls.payload.SignUpRequest;
-import com.navastud.polls.repository.RoleRepository;
-import com.navastud.polls.repository.UserRepository;
 import com.navastud.polls.security.JwtTokenProvider;
+import com.navastud.polls.service.RoleService;
+import com.navastud.polls.service.UserService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -39,16 +35,15 @@ public class AuthController {
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	private UserRepository userRepository;
+	@Qualifier("userServiceImpl")
+	private UserService userService;
 
 	@Autowired
-	private RoleRepository roleRepository;
+	@Qualifier("roleServiceImpl")
+	private RoleService roleService;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	JwtTokenProvider tokenProvider;
+	private JwtTokenProvider tokenProvider;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -67,26 +62,17 @@ public class AuthController {
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-			return new ResponseEntity(new ApiResponse(false, "Username is already taken!"), HttpStatus.BAD_REQUEST);
+		if (userService.existsByUsername(signUpRequest.getUsername())) {
+			return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Username is already taken!"),
+					HttpStatus.BAD_REQUEST);
 		}
 
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-			return new ResponseEntity(new ApiResponse(false, "Email address already in use!"), HttpStatus.BAD_REQUEST);
+		if (userService.existsByEmail(signUpRequest.getEmail())) {
+			return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Email address already in use!"),
+					HttpStatus.BAD_REQUEST);
 		}
 
-		// Creating user's account
-		User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
-				signUpRequest.getPassword());
-
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-		Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-				.orElseThrow(() -> new AppException("User Role not set"));
-
-		user.setRoles(Collections.singleton(userRole));
-
-		User result = userRepository.save(user);
+		User result = userService.createUser(signUpRequest);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{username}")
 				.buildAndExpand(result.getName()).toUri();

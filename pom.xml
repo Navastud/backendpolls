@@ -54,7 +54,12 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.0</version>
 		</dependency>
-
+		<!-- DevTools -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 		<!-- For Java 8 Date/Time Support -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>

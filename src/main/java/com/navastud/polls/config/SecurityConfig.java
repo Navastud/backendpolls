@@ -1,6 +1,7 @@
 package com.navastud.polls.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,9 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.navastud.polls.security.CustomUserDetailsService;
 import com.navastud.polls.security.JwtAuthenticationEntryPoint;
 import com.navastud.polls.security.JwtAuthenticationFilter;
+import com.navastud.polls.security.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +27,8 @@ import com.navastud.polls.security.JwtAuthenticationFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private CustomUserDetailsService customUserDetailsService;
+	@Qualifier("userDetailsServiceImpl")
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Autowired
 	private JwtAuthenticationEntryPoint unauthorizedHandler;
@@ -38,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+		authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
 	}
 
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -60,7 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/**/*.css", "/**/*.js")
 				.permitAll().antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
-				.antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**").permitAll().anyRequest().authenticated();
+				.antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**", "/api/roles/**").permitAll().anyRequest()
+				.authenticated();
 
 		// Add our custom JWT security filter
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

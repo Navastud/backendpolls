@@ -1,4 +1,4 @@
-package com.navastud.polls.model;
+package com.navastud.polls.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,12 +19,17 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
 
-import com.navastud.polls.model.audit.DateAudit;
+import com.navastud.polls.entity.audit.DateAudit;
 
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
 		@UniqueConstraint(columnNames = { "email" }) })
 public class User extends DateAudit {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 338307675615807909L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

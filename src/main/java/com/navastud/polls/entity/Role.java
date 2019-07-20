@@ -1,4 +1,4 @@
-package com.navastud.polls.model;
+package com.navastud.polls.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
