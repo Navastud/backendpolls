@@ -10,16 +10,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.navastud.polls.model.ChoiceVoteCount;
-import com.navastud.polls.model.Vote;
+import com.navastud.polls.entity.ChoiceVoteCount;
+import com.navastud.polls.entity.Vote;
 
 @Repository("voteRepository")
 public interface VoteRepository extends JpaRepository<Vote, Serializable> {
 
-	@Query("SELECT NEW com.navastud.polls.model.ChoiceVoteCount(v.choice.id, count(v.id)) FROM Vote v WHERE v.poll.id in :pollIds GROUP BY v.choice.id")
+	@Query("SELECT NEW com.navastud.polls.entity.ChoiceVoteCount(v.choice.id, count(v.id)) FROM Vote v WHERE v.poll.id in :pollIds GROUP BY v.choice.id")
 	List<ChoiceVoteCount> countByPollIdInGroupByChoiceId(@Param("pollIds") List<Long> pollIds);
 
-	@Query("SELECT NEW com.navastud.polls.model.ChoiceVoteCount(v.choice.id, count(v.id)) FROM Vote v WHERE v.poll.id = :pollId GROUP BY v.choice.id")
+	@Query("SELECT NEW com.navastud.polls.entity.ChoiceVoteCount(v.choice.id, count(v.id)) FROM Vote v WHERE v.poll.id = :pollId GROUP BY v.choice.id")
 	List<ChoiceVoteCount> countByPollIdGroupByChoiceId(@Param("pollId") Long pollId);
 
 	@Query("SELECT v FROM Vote v WHERE v.user.id = :userId and v.poll.id in :pollIds")

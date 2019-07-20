@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.navastud.polls.model.Poll;
-import com.navastud.polls.model.User;
+import com.navastud.polls.entity.Poll;
+import com.navastud.polls.entity.User;
 import com.navastud.polls.payload.ChoiceResponse;
 import com.navastud.polls.payload.PollResponse;
 import com.navastud.polls.payload.UserSummary;

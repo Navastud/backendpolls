@@ -1,4 +1,4 @@
-package com.navastud.polls.model;
+package com.navastud.polls.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.navastud.polls.model.audit.DateAudit;
+import com.navastud.polls.entity.audit.DateAudit;
 
 @Entity
 @Table(name = "votes", uniqueConstraints = { @UniqueConstraint(columnNames = { "poll_id", "user_id" }) })

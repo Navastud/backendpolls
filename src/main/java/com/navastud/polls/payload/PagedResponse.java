@@ -2,6 +2,9 @@ package com.navastud.polls.payload;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+@Component("pagedResponse")
 public class PagedResponse<T> {
 
 	private List<T> content;

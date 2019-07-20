@@ -2,7 +2,7 @@ package com.navastud.polls.service;
 
 import java.util.List;
 
-import com.navastud.polls.model.User;
+import com.navastud.polls.entity.User;
 import com.navastud.polls.payload.SignUpRequest;
 
 public interface UserService {

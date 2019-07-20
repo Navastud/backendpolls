@@ -1,4 +1,4 @@
-package com.navastud.polls.model.audit;
+package com.navastud.polls.entity.audit;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

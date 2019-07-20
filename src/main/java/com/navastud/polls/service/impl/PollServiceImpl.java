@@ -18,13 +18,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.navastud.polls.entity.Choice;
+import com.navastud.polls.entity.ChoiceVoteCount;
+import com.navastud.polls.entity.Poll;
+import com.navastud.polls.entity.User;
+import com.navastud.polls.entity.Vote;
 import com.navastud.polls.exception.BadRequestException;
 import com.navastud.polls.exception.ResourceNotFoundException;
-import com.navastud.polls.model.Choice;
-import com.navastud.polls.model.ChoiceVoteCount;
-import com.navastud.polls.model.Poll;
-import com.navastud.polls.model.User;
-import com.navastud.polls.model.Vote;
 import com.navastud.polls.payload.PagedResponse;
 import com.navastud.polls.payload.PollRequest;
 import com.navastud.polls.payload.PollResponse;
