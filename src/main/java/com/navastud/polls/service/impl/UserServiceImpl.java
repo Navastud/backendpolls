@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.navastud.polls.converter.UserConverter;
+import com.navastud.polls.entity.User;
 import com.navastud.polls.exception.ResourceNotFoundException;
-import com.navastud.polls.model.User;
 import com.navastud.polls.payload.SignUpRequest;
 import com.navastud.polls.repository.UserRepository;
 import com.navastud.polls.service.UserService;

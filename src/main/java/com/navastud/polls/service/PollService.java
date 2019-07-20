@@ -3,8 +3,8 @@ package com.navastud.polls.service;
 import java.util.List;
 import java.util.Map;
 
-import com.navastud.polls.model.Poll;
-import com.navastud.polls.model.User;
+import com.navastud.polls.entity.Poll;
+import com.navastud.polls.entity.User;
 import com.navastud.polls.payload.PagedResponse;
 import com.navastud.polls.payload.PollRequest;
 import com.navastud.polls.payload.PollResponse;

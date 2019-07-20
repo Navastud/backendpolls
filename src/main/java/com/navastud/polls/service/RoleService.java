@@ -3,9 +3,10 @@ package com.navastud.polls.service;
 import java.util.Optional;
 
 import com.navastud.polls.constant.RoleName;
-import com.navastud.polls.model.Role;
+import com.navastud.polls.entity.Role;
 import com.navastud.polls.payload.PagedResponse;
 import com.navastud.polls.payload.RoleRequest;
+import com.navastud.polls.payload.RoleResponse;
 
 public interface RoleService {
 
@@ -13,5 +14,7 @@ public interface RoleService {
 
 	Role createRole(RoleRequest roleRequest);
 
-	PagedResponse<Role> getAllRoles();
+	PagedResponse<RoleResponse> getAllRoles();
+
+	RoleResponse findById(Long id);
 }

@@ -1,4 +1,4 @@
-package com.navastud.polls.model.audit;
+package com.navastud.polls.entity.audit;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;

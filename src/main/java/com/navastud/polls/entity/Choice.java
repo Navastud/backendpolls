@@ -1,4 +1,4 @@
-package com.navastud.polls.model;
+package com.navastud.polls.entity;
 
 import java.util.Objects;
 

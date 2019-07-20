@@ -10,7 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.navastud.polls.model.User;
+import com.navastud.polls.entity.User;
 
 public class UserPrincipal implements UserDetails {
 

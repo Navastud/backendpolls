@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.navastud.polls.model.Poll;
+import com.navastud.polls.entity.Poll;
 import com.navastud.polls.payload.ApiResponse;
 import com.navastud.polls.payload.PagedResponse;
 import com.navastud.polls.payload.PollRequest;

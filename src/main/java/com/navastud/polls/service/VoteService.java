@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.navastud.polls.model.ChoiceVoteCount;
-import com.navastud.polls.model.Vote;
+import com.navastud.polls.entity.ChoiceVoteCount;
+import com.navastud.polls.entity.Vote;
 
 public interface VoteService {
 

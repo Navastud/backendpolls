@@ -8,8 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.navastud.polls.model.ChoiceVoteCount;
-import com.navastud.polls.model.Vote;
+import com.navastud.polls.entity.ChoiceVoteCount;
+import com.navastud.polls.entity.Vote;
 import com.navastud.polls.repository.VoteRepository;
 import com.navastud.polls.service.VoteService;
 

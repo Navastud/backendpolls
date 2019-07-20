@@ -1,4 +1,4 @@
-package com.navastud.polls.model;
+package com.navastud.polls.entity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import com.navastud.polls.model.audit.UserDateAudit;
+import com.navastud.polls.entity.audit.UserDateAudit;
 
 @Entity
 @Table(name = "polls")

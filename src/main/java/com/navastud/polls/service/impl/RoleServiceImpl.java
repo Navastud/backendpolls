@@ -1,8 +1,6 @@
 package com.navastud.polls.service.impl;
 
-import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,9 +11,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.navastud.polls.constant.RoleName;
-import com.navastud.polls.model.Role;
+import com.navastud.polls.converter.RoleConverter;
+import com.navastud.polls.entity.Role;
 import com.navastud.polls.payload.PagedResponse;
 import com.navastud.polls.payload.RoleRequest;
+import com.navastud.polls.payload.RoleResponse;
 import com.navastud.polls.repository.RoleRepository;
 import com.navastud.polls.service.RoleService;
 
@@ -24,7 +24,11 @@ public class RoleServiceImpl implements RoleService {
 
 	@Autowired
 	@Qualifier("roleRepository")
-	RoleRepository roleRepository;
+	private RoleRepository roleRepository;
+
+	@Autowired
+	@Qualifier("roleConverter")
+	private RoleConverter roleConverter;
 
 	@Override
 	public Optional<Role> findByName(RoleName roleName) {
@@ -42,20 +46,19 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public PagedResponse<Role> getAllRoles() {
+	public PagedResponse<RoleResponse> getAllRoles() {
 
-		// Retrieve Polls
-		Pageable pageable = PageRequest.of(1, 10, Sort.Direction.DESC, "createdAt");
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("name"));
 		Page<Role> roles = roleRepository.findAll(pageable);
 
-		if (roles.getNumberOfElements() == 0) {
-			return new PagedResponse<>(Collections.emptyList(), roles.getNumber(), roles.getSize(),
-					roles.getTotalElements(), roles.getTotalPages(), roles.isLast());
-		}
+		return roleConverter.convertPageToPagedResponse(roles);
 
-		return new PagedResponse<>(roles.stream().map(r -> r).collect(Collectors.toList()), 1, roles.getSize(), 1, 1,
-				false);
+	}
 
+	@Override
+	public RoleResponse findById(Long id) {
+		return roleConverter.convertRolToRolResponse(roleRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException(String.format("Role not found with id : %d ", id))));
 	}
 
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.navastud.polls.model.User;
+import com.navastud.polls.entity.User;
 import com.navastud.polls.payload.PagedResponse;
 import com.navastud.polls.payload.PollResponse;
 import com.navastud.polls.payload.UserIdentityAvailability;
@@ -25,7 +25,7 @@ import com.navastud.polls.service.VoteService;
 import com.navastud.polls.util.AppConstants;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
 	@Autowired
@@ -42,7 +42,7 @@ public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@GetMapping("/user/me")
+	@GetMapping("/me")
 	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 	public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
 		UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(),
@@ -50,21 +50,21 @@ public class UserController {
 		return userSummary;
 	}
 
-	@GetMapping("/user/checkUsernameAvailability")
+	@GetMapping("/checkUsernameAvailability")
 	public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
 
 		Boolean isAvailable = !userService.existsByUsername(username);
 		return new UserIdentityAvailability(isAvailable);
 	}
 
-	@GetMapping("/user/checkEmilAvailability")
+	@GetMapping("/checkEmilAvailability")
 	public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
 
 		Boolean isAvailable = !userService.existsByEmail(email);
 		return new UserIdentityAvailability(isAvailable);
 	}
 
-	@GetMapping("/user/{username}")
+	@GetMapping("/{username}")
 	public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
 		User user = userService.findByUsername(username);
 		long pollCount = pollService.countByCreatedBy(user.getId());
@@ -76,7 +76,7 @@ public class UserController {
 		return userProfile;
 	}
 
-	@GetMapping("/users/{username}/polls")
+	@GetMapping("/{username}/polls")
 	public PagedResponse<PollResponse> getPollsCreatedBy(@PathVariable(value = "username") String username,
 			@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
@@ -85,7 +85,7 @@ public class UserController {
 		return pollService.getPollsCreatedBy(username, currentUser, page, size);
 	}
 
-	@GetMapping("/users/{username}/votes")
+	@GetMapping("/{username}/votes")
 	public PagedResponse<PollResponse> getPollsVotedBy(@PathVariable(value = "username") String username,
 			@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,

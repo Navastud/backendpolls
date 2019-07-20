@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.navastud.polls.constant.RoleName;
+import com.navastud.polls.entity.User;
 import com.navastud.polls.exception.AppException;
-import com.navastud.polls.model.User;
 import com.navastud.polls.payload.SignUpRequest;
 import com.navastud.polls.service.RoleService;
 

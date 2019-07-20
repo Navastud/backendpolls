@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.navastud.polls.model.User;
+import com.navastud.polls.entity.User;
 import com.navastud.polls.payload.ApiResponse;
 import com.navastud.polls.payload.JwtAuthenticationResponse;
 import com.navastud.polls.payload.LoginRequest;
