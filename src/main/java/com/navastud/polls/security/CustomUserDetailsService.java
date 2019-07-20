@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.navastud.polls.model.User;
+import com.navastud.polls.entity.User;
 import com.navastud.polls.repository.UserRepository;
 
 @Service("customUserDetailsService")
