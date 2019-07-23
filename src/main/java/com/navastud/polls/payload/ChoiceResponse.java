@@ -1,5 +1,8 @@
 package com.navastud.polls.payload;
 
+import org.springframework.stereotype.Component;
+
+@Component("choiceResponse")
 public class ChoiceResponse {
 
 	private Long id;

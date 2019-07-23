@@ -13,11 +13,7 @@ import com.navastud.polls.payload.PagedResponse;
 import com.navastud.polls.payload.RoleResponse;
 
 @Component("roleConverter")
-public class RoleConverter {
-
-	@Autowired
-	@Qualifier("pagedConverter")
-	private PagedConverter<RoleResponse> pagedConverter;
+public class RoleConverter extends BaseConverter<RoleResponse> {
 
 	@Autowired
 	@Qualifier("roleResponse")
@@ -31,12 +27,13 @@ public class RoleConverter {
 		return roleResponse;
 	}
 
-	public PagedResponse<RoleResponse> convertPageToPagedResponse(Page<Role> roles) {
+	@Override
+	public PagedResponse<RoleResponse> convertPageToPagedResponse(Page<?> pages) {
 
-		List<RoleResponse> content = roles.stream().map(role -> convertRolToRolResponse(role))
+		List<RoleResponse> content = pages.stream().map(role -> convertRolToRolResponse((Role) role))
 				.collect(Collectors.toList());
 
-		return pagedConverter.convertPageToPagedResponse(roles, content);
+		return pagedConverter.convertPageToPagedResponse(pages, content);
 	}
 
 }
