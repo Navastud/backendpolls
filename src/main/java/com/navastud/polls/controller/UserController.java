@@ -40,18 +40,26 @@ public class UserController {
 	@Qualifier("pollServiceImpl")
 	private PollService pollService;
 
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@GetMapping("/me")
 	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 	public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+
+		LOGGER.info("METHOD: getCurrentUser() -- MAPPING: /users/me -- PARAMS: currentUser=" + currentUser);
+
 		UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(),
 				currentUser.getName());
+
 		return userSummary;
 	}
 
 	@GetMapping("/checkUsernameAvailability")
 	public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
+
+		LOGGER.info(
+				"METHOD: checkUsernameAvailability() -- MAPPING: /users/checkUsernameAvailability -- PARAMS: username="
+						+ username);
 
 		Boolean isAvailable = !userService.existsByUsername(username);
 		return new UserIdentityAvailability(isAvailable);
@@ -60,12 +68,18 @@ public class UserController {
 	@GetMapping("/checkEmilAvailability")
 	public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
 
+		LOGGER.info(
+				"METHOD: checkEmilAvailability() -- MAPPING: /users/checkEmilAvailability -- PARAMS: email=" + email);
+
 		Boolean isAvailable = !userService.existsByEmail(email);
 		return new UserIdentityAvailability(isAvailable);
 	}
 
 	@GetMapping("/{username}")
 	public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
+
+		LOGGER.info("METHOD: getUserProfile() -- MAPPING: /users/{username} -- PARAMS: username=" + username);
+
 		User user = userService.findByUsername(username);
 		long pollCount = pollService.countByCreatedBy(user.getId());
 		long voteCount = voteService.countByUserId(user.getId());
@@ -82,6 +96,9 @@ public class UserController {
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 
+		LOGGER.info("METHOD: getPollsCreatedBy() -- MAPPING: /users/{username}/polls -- PARAMS: username=" + username
+				+ ", currentUser=" + currentUser + ", page=" + page + ", size=" + size);
+
 		return pollService.getPollsCreatedBy(username, currentUser, page, size);
 	}
 
@@ -90,6 +107,9 @@ public class UserController {
 			@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+
+		LOGGER.info("METHOD: getPollsVotedBy() -- MAPPING: /users/{username}/votes -- PARAMS: username=" + username
+				+ ", currentUser=" + currentUser + ", page=" + page + ", size=" + size);
 
 		return pollService.getPollsVotedBy(username, currentUser, page, size);
 	}

@@ -4,6 +4,8 @@ import java.net.URI;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -31,19 +33,29 @@ public class RoleController {
 	@Qualifier("roleServiceImpl")
 	private RoleService roleService;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
 	@GetMapping
 	public PagedResponse<RoleResponse> getRoles() {
+
+		LOGGER.info("METHOD: getRoles() -- MAPPING: /roles");
+
 		return roleService.getAllRoles();
 	}
 
 	@GetMapping("/{id}")
 	public RoleResponse getRole(@PathVariable(value = "id") Long id) {
+
+		LOGGER.info("METHOD: getRole() -- MAPPING: /roles/{id} -- PARAMS: id=" + id);
+
 		return roleService.findById(id);
 	}
 
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> createRole(@Valid @RequestBody RoleRequest roleRequest) {
+
+		LOGGER.info("METHOD: createRole() -- MAPPING: /roles -- PARAMS: roleRequest=" + roleRequest);
 
 		Role role = roleService.createRole(roleRequest);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{roleId}").buildAndExpand(role.getId())

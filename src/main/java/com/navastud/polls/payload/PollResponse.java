@@ -3,8 +3,11 @@ package com.navastud.polls.payload;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+@Component("pollResponse")
 public class PollResponse {
 
 	private Long id;

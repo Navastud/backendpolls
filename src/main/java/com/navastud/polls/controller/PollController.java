@@ -43,18 +43,24 @@ public class PollController {
 	@Qualifier("pollServiceImpl")
 	private PollService pollService;
 
-	private static final Logger logger = LoggerFactory.getLogger(PollController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PollController.class);
 
 	@GetMapping
 	public PagedResponse<PollResponse> getPolls(@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+
+		LOGGER.info("METHOD: getPolls() -- MAPPING: /polls -- PARAMS: currentUser=" + currentUser + ", page=" + page
+				+ ", size=" + size);
+
 		return pollService.getAllPolls(currentUser, page, size);
-	};
+	}
 
 	@PostMapping
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> createPoll(@Valid @RequestBody PollRequest pollRequest) {
+
+		LOGGER.info("METHOD: createPoll() -- MAPPING: /polls -- PARAMS: pollRequest=" + pollRequest);
 
 		Poll poll = pollService.createPoll(pollRequest);
 
@@ -67,6 +73,9 @@ public class PollController {
 	@PreAuthorize("hasRole('USER')")
 	public PollResponse castVote(@CurrentUser UserPrincipal currentUser, @PathVariable Long pollId,
 			@Valid @RequestBody VoteRequest voteRequest) {
+
+		LOGGER.info("METHOD: createPoll() -- MAPPING: /polls/{pollId}/votes -- PARAMS: currentUser=" + currentUser
+				+ ", pollId=" + pollId + ", voteRequest=" + voteRequest);
 
 		return pollService.castVoteAndGetUpdatedPoll(pollId, voteRequest, currentUser);
 	}
