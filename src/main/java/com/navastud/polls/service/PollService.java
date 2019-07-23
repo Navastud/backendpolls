@@ -35,4 +35,6 @@ public interface PollService {
 
 	long countByCreatedBy(Long id);
 
+	Poll findById(Long pollId);
+
 }
