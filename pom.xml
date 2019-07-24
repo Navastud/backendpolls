@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.navastud</groupId>
-	<artifactId>polls</artifactId>
+	<artifactId>backendpolls</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>polls</name>
 	<description>Spring Boot + Spring Security + JWT + MySQL + React Full Stack Polling App</description>
